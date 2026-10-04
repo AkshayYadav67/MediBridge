@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<div class="card"><h2>Appointment #{{ appt.pk }} <span class="tag {{ appt.status }}">{{ appt.get_status_display }}</span></h2>
+<p><b>Doctor:</b> {{ appt.doctor }}<br><b>Patient:</b> {{ appt.patient.display_name }}<br><b>When:</b> {{ appt.date }} at {{ appt.time|time:"H:i" }} ({{ appt.get_mode_display }})<br><b>Reason:</b> {{ appt.reason }}</p>
+<p><b>Fee:</b> {{ appt.fee }} — {% if appt.is_paid %}<span class="tag paid">Paid</span>{% else %}<span class="tag pending">Unpaid</span>{% endif %}</p>
+<div class="row">
+{% if user.is_doctor %}
+  {% if appt.status == "pending" %}<form method="post" action="{% url 'appointments:status' appt.pk 'confirm' %}">{% csrf_token %}<button class="btn">Confirm</button></form>{% endif %}
+  {% if appt.status == "confirmed" %}<form method="post" action="{% url 'appointments:status' appt.pk 'complete' %}">{% csrf_token %}<button class="btn">Mark completed</button></form>{% endif %}
+  <a class="btn sec" href="{% url 'records:patient' appt.patient_id %}">Patient history</a>
+  <a class="btn sec" href="{% url 'records:add' appt.pk %}">Add medical record</a>
+  <a class="btn sec" href="{% url 'prescriptions:create' appt.pk %}">Write prescription</a>
+  <a class="btn sec" href="{% url 'records:add_test' appt.patient_id %}">Add test result</a>
+  <a class="btn sec" href="{% url 'payments:charge' appt.patient_id %}">Add charge</a>
+{% endif %}
+{% if user.is_patient and not appt.is_paid and appt.status != "cancelled" %}<a class="btn" href="{% url 'payments:pay_appointment' appt.pk %}">Pay now</a>{% endif %}
+{% if user.is_patient and appt.status == "completed" and not feedback %}<a class="btn sec" href="{% url 'appointments:feedback' appt.pk %}">Leave feedback</a>{% endif %}
+{% if user.is_patient or user.is_doctor %}{% if appt.status == "confirmed" or appt.messages.exists %}<a class="btn" href="{% url 'telemedicine:room' appt.pk %}">{% if appt.mode == "video" %}Join video / chat{% else %}Open chat{% endif %}</a>{% endif %}
+{% if appt.is_open %}<form method="post" action="{% url 'appointments:status' appt.pk 'cancel' %}">{% csrf_token %}<button class="btn danger">Cancel</button></form>{% endif %}{% endif %}
+</div></div>
+{% if feedback %}<div class="card"><b>Feedback:</b> {{ feedback.rating }}★ {{ feedback.comment }}</div>{% endif %}
+{% for p in prescriptions %}<div class="card">💊 <a href="{% url 'prescriptions:detail' p.pk %}">Prescription #{{ p.pk }}</a></div>{% endfor %}
+{% endblock %}

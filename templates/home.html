@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero">
+  <h1>Healthcare, connected.</h1>
+
+  <p class="muted">
+    Book doctors, consult over video, keep your records and prescriptions in one secure place.
+  </p>
+
+  {% if not user.is_authenticated %}
+    <a class="btn" href="{% url 'accounts:register' %}">Get started</a>
+    <a class="btn sec" href="{% url 'accounts:login' %}">Log in</a>
+  {% else %}
+    <a class="btn" href="{% url 'accounts:doctors' %}">Find a doctor</a>
+  {% endif %}
+</div>
+
+<h2>Our doctors</h2>
+
+<div class="grid">
+  {% for d in doctors %}
+    <div class="card">
+      <h3>{{ d }}</h3>
+
+      <p class="muted">
+        {{ d.experience_years }} yrs · fee {{ d.consultation_fee }}
+      </p>
+
+      {% if user.is_patient %}
+        <a class="btn sm" href="{% url 'appointments:book' d.pk %}">Book</a>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="muted">No doctors yet.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

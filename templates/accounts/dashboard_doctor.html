@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block content %}
+<h2>Dr. {{ user.display_name }} <small class="muted">{{ profile.specialization }}</small></h2>
+{% if not profile.is_approved %}<div class="msg">Your profile is awaiting administrator approval. Add your availability meanwhile.</div>{% endif %}
+<div class="card"><h3>Pending requests ({{ pending.count }})</h3><table>{% for a in pending %}
+<tr><td>{{ a.date }} {{ a.time|time:"H:i" }}</td><td>{{ a.patient.display_name }}</td><td>{{ a.reason|truncatechars:60 }}</td><td><a href="{% url 'appointments:detail' a.pk %}">Review</a></td></tr>
+{% empty %}<tr><td class="muted">No pending requests.</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Today</h3><table>{% for a in today %}
+<tr><td>{{ a.time|time:"H:i" }}</td><td>{{ a.patient.display_name }}</td><td><span class="tag {{ a.status }}">{{ a.get_status_display }}</span></td><td><a href="{% url 'appointments:detail' a.pk %}">Open</a></td></tr>
+{% empty %}<tr><td class="muted">No appointments today.</td></tr>{% endfor %}</table></div>
+{% endblock %}

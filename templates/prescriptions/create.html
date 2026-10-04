@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<div class="card"><h2>Prescription for {{ appt.patient.display_name }}</h2>
+<form method="post">{% csrf_token %}{{ form.as_p }}<h3>Medicines</h3>{{ formset.management_form }}
+{% for f in formset %}<div class="card">{{ f.as_p }}</div>{% endfor %}<button class="btn">Issue prescription</button></form></div>{% endblock %}

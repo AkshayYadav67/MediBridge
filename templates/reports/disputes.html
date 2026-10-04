@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<h2>Payment disputes</h2><div class="card"><table><tr><th>#</th><th>By</th><th>Payment</th><th>Reason</th><th>Status</th><th></th></tr>{% for d in disputes %}
+<tr><td>{{ d.pk }}</td><td>{{ d.raised_by.display_name }}</td><td>{{ d.payment.amount }} ({{ d.payment.status }})</td><td>{{ d.reason }}</td><td><span class="tag {{ d.status }}">{{ d.get_status_display }}</span></td><td><a href="{% url 'reports:resolve_dispute' d.pk %}">Resolve</a></td></tr>
+{% empty %}<tr><td colspan="6" class="muted">No disputes.</td></tr>{% endfor %}</table></div>{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<h2>Payment history</h2><div class="card"><table><tr><th>Date</th><th>For</th><th>Amount</th><th>Status</th><th>Ref</th><th></th></tr>{% for p in payments %}
+<tr><td>{{ p.created_at|date }}</td><td>{{ p.description|default:p.get_purpose_display }}{% if user.is_doctor %}<br><small class="muted">{{ p.user.display_name }}</small>{% endif %}</td><td>{{ p.amount }}</td><td><span class="tag {{ p.status }}">{{ p.get_status_display }}</span></td><td>{{ p.transaction_id }}</td>
+<td>{% if user.is_patient %}{% if p.status == "pending" or p.status == "failed" %}<a class="btn sm" href="{% url 'payments:pay' p.pk %}">Pay</a>{% elif p.status == "paid" %}<a href="{% url 'payments:dispute' p.pk %}">Dispute</a>{% endif %}{% endif %}</td></tr>
+{% empty %}<tr><td colspan="6" class="muted">No payments.</td></tr>{% endfor %}</table></div>{% endblock %}

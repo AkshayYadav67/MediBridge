@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<h2>My weekly availability</h2>
+<div class="card"><table>{% for s in slots %}<tr><td>{{ s.get_weekday_display }}</td><td>{{ s.start_time|time:"H:i" }} – {{ s.end_time|time:"H:i" }}</td><td>{{ s.slot_minutes }} min slots</td>
+<td><form method="post" action="{% url 'accounts:availability_delete' s.pk %}">{% csrf_token %}<button class="btn danger sm">Remove</button></form></td></tr>
+{% empty %}<tr><td class="muted">No availability set.</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Add hours</h3><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn">Add</button></form></div>
+{% endblock %}

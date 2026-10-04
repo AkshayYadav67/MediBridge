@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<div class="card" style="max-width:480px;margin:auto"><h2>Checkout</h2><p>{{ payment.description|default:payment.get_purpose_display }}</p><p class="stat">{{ payment.amount }}</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn">Pay {{ payment.amount }}</button></form>
+<p class="muted">Demo gateway: no real charge is made. Card details are never stored.</p></div>{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block content %}
+<div class="card"><h2>Book {{ doctor }}</h2><p class="muted">Fee: {{ doctor.consultation_fee }}</p>
+<form method="get" class="row"><label>Date <input type="date" name="date" min="{{ today|date:'Y-m-d' }}" value="{{ day|date:'Y-m-d' }}" required></label><button class="btn sec">Show available times</button></form></div>
+{% if day %}<div class="card">
+  {% if slots %}<form method="post">{% csrf_token %}{{ form.non_field_errors }}{{ form.date }}
+    <p><label>Time</label>{{ form.time }}{{ form.time.errors }}</p><p><label>Type</label>{{ form.mode }}</p><p><label>Reason</label>{{ form.reason }}{{ form.reason.errors }}</p>
+    <button class="btn">Request appointment</button></form>
+  {% else %}<p class="muted">No free slots on {{ day }}. Try another date.</p>{% endif %}</div>{% endif %}
+{% endblock %}

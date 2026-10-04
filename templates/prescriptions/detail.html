@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block content %}
+<div class="card"><h2>Prescription #{{ rx.pk }}</h2><p>{{ rx.doctor }} → {{ rx.patient.display_name }} · {{ rx.created_at|date }}</p>
+{% if rx.diagnosis %}<p><b>Diagnosis:</b> {{ rx.diagnosis }}</p>{% endif %}
+<table><tr><th>Medicine</th><th>Dosage</th><th>Frequency</th><th>Days</th><th>Instructions</th></tr>{% for i in rx.items.all %}<tr><td>{{ i.medicine }}</td><td>{{ i.dosage }}</td><td>{{ i.frequency }}</td><td>{{ i.duration_days }}</td><td>{{ i.instructions }}</td></tr>{% endfor %}</table>
+{% if rx.notes %}<p class="muted">{{ rx.notes }}</p>{% endif %}{% if rx.refill_date %}<p>Refill due: {{ rx.refill_date }}</p>{% endif %}
+<div class="row"><button class="btn sec" onclick="window.print()">Print</button>{% if user.is_patient %}<a class="btn" href="{% url 'prescriptions:order' rx.pk %}">Order for home delivery</a>{% endif %}</div></div>
+{% if orders %}<div class="card"><h3>Pharmacy orders</h3><table>{% for o in orders %}<tr><td>{{ o.pharmacy }}</td><td>{{ o.created_at|date }}</td><td><span class="tag {{ o.status }}">{{ o.get_status_display }}</span></td></tr>{% endfor %}</table></div>{% endif %}
+{% endblock %}

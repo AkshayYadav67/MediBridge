@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block content %}
+<h2>Medical history – {{ patient.display_name }}</h2>
+{% if profile %}<div class="card"><b>Blood group:</b> {{ profile.blood_group|default:"-" }} · <b>Allergies:</b> {{ profile.allergies|default:"-" }} · <b>DOB:</b> {{ profile.date_of_birth|default:"-" }}</div>{% endif %}
+<h3>Records</h3>{% for r in records %}<div class="card"><b>{{ r.created_at|date }}</b> — {{ r.doctor }}<br><b>Diagnosis:</b> {{ r.diagnosis }}<br>{% if r.treatment %}<b>Treatment:</b> {{ r.treatment }}<br>{% endif %}{% if r.notes %}<span class="muted">{{ r.notes }}</span>{% endif %}</div>{% empty %}<p class="muted">No records.</p>{% endfor %}
+<h3>Test results</h3><div class="card"><table><tr><th>Date</th><th>Test</th><th>Result</th><th>Range</th><th></th></tr>{% for t in tests %}
+<tr><td>{{ t.test_date }}</td><td>{{ t.name }}</td><td>{{ t.result }}</td><td>{{ t.reference_range }}</td><td>{% if t.report_file %}<a href="{{ t.report_file.url }}">Report</a>{% endif %}</td></tr>
+{% empty %}<tr><td colspan="5" class="muted">No tests.</td></tr>{% endfor %}</table></div>
+{% endblock %}

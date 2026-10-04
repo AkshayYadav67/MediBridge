@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block content %}
+<h2>Appointments</h2>
+<div class="row"><a class="btn sm sec" href="?">All</a>{% for v,l in statuses %}<a class="btn sm sec" href="?status={{ v }}">{{ l }}</a>{% endfor %}</div><br>
+<div class="card"><table><tr><th>When</th><th>Patient</th><th>Doctor</th><th>Mode</th><th>Status</th><th></th></tr>
+{% for a in appointments %}<tr><td>{{ a.date }} {{ a.time|time:"H:i" }}</td><td>{{ a.patient.display_name }}</td><td>{{ a.doctor }}</td><td>{{ a.get_mode_display }}</td>
+<td><span class="tag {{ a.status }}">{{ a.get_status_display }}</span></td><td><a href="{% url 'appointments:detail' a.pk %}">Open</a></td></tr>
+{% empty %}<tr><td colspan="6" class="muted">No appointments.</td></tr>{% endfor %}</table></div>
+{% endblock %}

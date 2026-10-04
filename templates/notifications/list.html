@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<div class="row"><h2 style="margin-right:auto">Notifications</h2><form method="post" action="{% url 'notifications:read_all' %}">{% csrf_token %}<button class="btn sec sm">Mark all read</button></form></div>
+{% for n in items %}<div class="card" {% if not n.is_read %}style="border-left:4px solid var(--p)"{% endif %}><b>{{ n.title }}</b> <span class="muted">{{ n.created_at|timesince }} ago</span><br>{{ n.message }}{% if n.link %} <a href="{{ n.link }}">Open</a>{% endif %}</div>
+{% empty %}<p class="muted">Nothing yet.</p>{% endfor %}{% endblock %}

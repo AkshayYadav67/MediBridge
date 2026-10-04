@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block content %}
+<h2>Hello, {{ user.display_name }}</h2>
+<div class="row"><a class="btn" href="{% url 'accounts:doctors' %}">Book an appointment</a><a class="btn sec" href="{% url 'records:mine' %}">Medical history</a></div><br>
+<div class="card"><h3>Upcoming appointments</h3><table>{% for a in upcoming %}
+<tr><td>{{ a.date }} {{ a.time|time:"H:i" }}</td><td>{{ a.doctor }}</td><td><span class="tag {{ a.status }}">{{ a.get_status_display }}</span></td><td><a href="{% url 'appointments:detail' a.pk %}">Open</a></td></tr>
+{% empty %}<tr><td class="muted">Nothing scheduled.</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Recent prescriptions</h3><table>{% for p in prescriptions %}
+<tr><td>{{ p.created_at|date }}</td><td>{{ p.doctor }}</td><td><a href="{% url 'prescriptions:detail' p.pk %}">View</a></td></tr>{% empty %}<tr><td class="muted">None yet.</td></tr>{% endfor %}</table></div>
+{% endblock %}

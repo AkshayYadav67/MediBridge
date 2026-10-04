@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<h2>Prescriptions</h2><div class="card"><table><tr><th>Date</th><th>Patient</th><th>Doctor</th><th>Diagnosis</th><th></th></tr>{% for p in prescriptions %}
+<tr><td>{{ p.created_at|date }}</td><td>{{ p.patient.display_name }}</td><td>{{ p.doctor }}</td><td>{{ p.diagnosis }}</td><td><a href="{% url 'prescriptions:detail' p.pk %}">View</a></td></tr>
+{% empty %}<tr><td colspan="5" class="muted">None.</td></tr>{% endfor %}</table></div>{% endblock %}

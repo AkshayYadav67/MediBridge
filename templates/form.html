@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<div class="card" style="max-width:560px;margin:auto"><h2>{{ title }}</h2>
+<form method="post" {% if multipart %}enctype="multipart/form-data"{% endif %}>{% csrf_token %}{{ form.as_p }}<button class="btn">{{ submit|default:"Save" }}</button></form></div>
+{% endblock %}

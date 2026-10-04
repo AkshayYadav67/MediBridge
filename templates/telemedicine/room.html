@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% load static %}{% block content %}
+<h2>Consultation – {{ appt.doctor }} &amp; {{ appt.patient.display_name }}</h2>
+{% if active and appt.mode == "video" %}<div class="card"><iframe class="video" src="{{ video_url }}" allow="camera; microphone; fullscreen; display-capture"></iframe>
+<p class="muted">The room link is unique to this appointment and only reachable by its two participants.</p></div>
+{% elif not active %}<div class="msg">The video room opens once the appointment is confirmed. Chat remains available.</div>{% endif %}
+<div class="card"><h3>Chat</h3><div id="chat" data-messages-url="{% url 'telemedicine:messages' appt.pk %}" data-send-url="{% url 'telemedicine:send' appt.pk %}" data-csrf="{{ csrf_token }}"></div>
+<form id="chat-form" class="row" style="margin-top:.6rem"><input id="chat-input" autocomplete="off" placeholder="Type a message…" style="flex:1"><button class="btn">Send</button></form></div>
+<script src="{% static 'js/chat.js' %}"></script>{% endblock %}

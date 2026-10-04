@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<h2>Find a doctor</h2>
+<form class="row card"><input name="specialization" value="{{ spec }}" placeholder="Specialization e.g. Dermatology" style="flex:1"><button class="btn">Search</button></form>
+<div class="grid">{% for d in doctors %}<div class="card"><h3>{{ d }}</h3><p>{{ d.bio|truncatechars:100 }}</p>
+<p class="muted">{{ d.experience_years }} yrs · fee {{ d.consultation_fee }}</p>
+{% if user.is_patient %}<a class="btn sm" href="{% url 'appointments:book' d.pk %}">Book appointment</a>{% endif %}</div>{% empty %}<p class="muted">No doctors match.</p>{% endfor %}</div>
+{% endblock %}

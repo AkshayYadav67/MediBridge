@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}
+<h2>Accounts</h2><div class="row"><a class="btn sec sm" href="?">All</a><a class="btn sec sm" href="?role=patient">Patients</a><a class="btn sec sm" href="?role=doctor">Doctors</a><a class="btn sec sm" href="?role=staff">Staff</a><a class="btn sec sm" href="?role=admin">Admins</a><a class="btn sm" href="/admin/accounts/user/add/">+ Add account</a></div><br>
+<div class="card"><table><tr><th>User</th><th>Role</th><th>Email</th><th>Active</th><th></th></tr>{% for u in users %}<tr><td>{{ u.username }}</td><td>{{ u.role }}</td><td>{{ u.email }}</td><td>{{ u.is_active|yesno:"Yes,No" }}</td>
+<td><form method="post" action="{% url 'reports:toggle_user' u.pk %}">{% csrf_token %}<button class="btn sm {% if u.is_active %}danger{% endif %}">{% if u.is_active %}Deactivate{% else %}Activate{% endif %}</button></form></td></tr>{% endfor %}</table></div>{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block content %}
+<h2>Admin dashboard</h2>
+<div class="grid">
+<div class="card"><div class="muted">Total revenue</div><div class="stat">{{ revenue_total }}</div></div>
+<div class="card"><div class="muted">Avg. rating</div><div class="stat">{{ avg_rating|default_if_none:"–"|floatformat:1 }}</div></div>
+<div class="card"><div class="muted">Open disputes</div><div class="stat">{{ open_disputes }}</div></div></div>
+<div class="row"><a class="btn sec sm" href="{% url 'reports:export' 'appointments' %}">⬇ Appointments CSV</a><a class="btn sec sm" href="{% url 'reports:export' 'payments' %}">⬇ Payments CSV</a><a class="btn sec sm" href="{% url 'reports:export' 'feedback' %}">⬇ Feedback CSV</a></div><br>
+<div class="grid">
+<div class="card"><h3>Users</h3>{% for u in users %}<div>{{ u.role|title }}: <b>{{ u.n }}</b></div>{% endfor %}</div>
+<div class="card"><h3>Appointments</h3>{% for a in appt_status %}<div>{{ a.status|title }}: <b>{{ a.n }}</b></div>{% endfor %}</div>
+<div class="card"><h3>Revenue by month</h3>{% for r in revenue_monthly %}<div>{{ r.m|date:"M Y" }}: <b>{{ r.s }}</b></div>{% empty %}<span class="muted">No payments.</span>{% endfor %}</div>
+<div class="card"><h3>System health</h3><div>Database: {% if health.database %}✅ OK{% else %}❌ DOWN{% endif %}</div><div>Undelivered emails: {{ health.failed_emails }}</div><div>Unread notifications: {{ health.unread_notifications }}</div></div></div>
+<div class="card"><h3>Doctors awaiting approval</h3><table>{% for d in pending_doctors %}<tr><td>{{ d }}</td><td>{{ d.license_number }}</td><td><form method="post" action="{% url 'reports:approve_doctor' d.pk %}">{% csrf_token %}<button class="btn sm">Approve</button></form></td></tr>{% empty %}<tr><td class="muted">None.</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Busiest doctors</h3>{% for d in top_doctors %}<div>{{ d }} — {{ d.n }} appointments</div>{% endfor %}</div>
+<div class="card"><h3>Recent feedback</h3>{% for f in feedback %}<div>{{ f.rating }}★ {{ f.appointment.doctor }} — {{ f.comment }}</div>{% empty %}<span class="muted">None.</span>{% endfor %}</div>
+{% endblock %}

@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block content %}
+<h2>My patients</h2><div class="card"><table>{% for p in patients %}<tr><td>{{ p.display_name }}</td><td>{{ p.phone }}</td><td><a href="{% url 'records:patient' p.pk %}">History</a></td></tr>{% empty %}<tr><td class="muted">No patients yet.</td></tr>{% endfor %}</table></div>{% endblock %}
